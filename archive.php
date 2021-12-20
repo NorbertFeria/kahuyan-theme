@@ -37,4 +37,6 @@ if ( is_day() ) {
 
 $context['posts'] = new Timber\PostQuery();
 
+$context['twigtemplates'] = $templates;
+
 Timber::render( $templates, $context );

@@ -1,0 +1,151 @@
+<div class="container">
+<div class="accordion my-2" id="themeDebug">
+
+    <div class="accordion-item">
+        <h2 class="accordion-header" >
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#debugGeneral" aria-expanded="true" aria-controls="debugGeneral">
+                General
+            </button>
+        </h2>
+    
+        <div id="debugGeneral" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#themeDebug">
+            <div class="accordion-body">
+                
+                is_active_sidebar:  <BR><strong>{{ is_active_sidebar ? 'Yes' : 'No' }}</strong><BR>
+                Body Class: <BR><strong>{{body_class}}</strong><BR>
+                Twig templates: <BR>
+                <strong>
+                {% for twigtemplate in twigtemplates %}
+                    {{ twigtemplate }}<BR>
+                {% endfor %}
+                </strong>
+             </div>
+        </div>
+    </div>
+
+    {%if post %}
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#debugPost" aria-expanded="true" aria-controls="debugPost">
+                Post Object
+            </button>
+        </h2>
+    
+        <div id="debugPost" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#themeDebug">
+            <div class="accordion-body">
+                <pre>
+                {{ post|print_r }}
+                </pre>
+            </div>
+        </div>
+    </div>
+    {%endif%}
+
+    {%if request.post %}
+    <div class="accordion-item">
+        <h2 class="accordion-header" >
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#debugRequest" aria-expanded="true" aria-controls="debugRequest">
+                Post Request 
+            </button>
+        </h2>
+    
+        <div id="debugRequest" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#themeDebug">
+            <div class="accordion-body">
+                <pre>
+                {{ request.post|print_r }}
+                </pre>
+            </div>
+        </div>
+    </div>
+    {%endif%}
+
+    {%if request.get %}
+    <div class="accordion-item">
+        <h2 class="accordion-header" >
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#debuggetRequest" aria-expanded="true" aria-controls="debuggetRequest">
+                Get Request 
+            </button>
+        </h2>
+    
+        <div id="debuggetRequest" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#themeDebug">
+            <div class="accordion-body">
+                <pre>
+                {{ request.get|print_r }}
+                </pre>
+            </div>
+        </div>
+    </div>
+    {%endif%}
+
+    {%if posts %}
+    <div class="accordion-item">
+        <h2 class="accordion-header" >
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#debugposts" aria-expanded="true" aria-controls="debugposts">
+                Posts 
+            </button>
+        </h2>
+    
+        <div id="debugposts" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#themeDebug">
+            <div class="accordion-body">
+                {{ posts|print_r }}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {%if user %}
+    <div class="accordion-item">
+        <h2 class="accordion-header" >
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#debugUser" aria-expanded="true" aria-controls="debugUser">
+                User Object
+            </button>
+        </h2>
+    
+        <div id="debugUser" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#themeDebug">
+            <div class="accordion-body">
+                <pre>
+                {{ user|print_r }}
+                </pre>
+            </div>
+        </div>
+    </div>
+    {%endif%}
+
+    {%if theme %}
+    <div class="accordion-item">
+        <h2 class="accordion-header" >
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#debugTheme" aria-expanded="true" aria-controls="debugTheme">
+                Theme Object
+            </button>
+        </h2>
+    
+        <div id="debugTheme" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#themeDebug">
+            <div class="accordion-body">
+                <pre>
+                {{ theme|print_r }}
+                </pre>
+            </div>
+        </div>
+    </div>
+    {%endif%}
+
+    {%if site %}
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#debugSite" aria-expanded="true" aria-controls="debugSite">
+                Site 
+            </button>
+        </h2>
+    
+        <div id="debugSite" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#themeDebug">
+            <div class="accordion-body">
+                <pre>
+                {{ site|print_r }}
+                </pre>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+</div>

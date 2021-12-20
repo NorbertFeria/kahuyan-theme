@@ -47,9 +47,15 @@
 					Sorry, no content
 				{% endblock %}
 				</div>
-				{{function( 'get_sidebar' )}}
+				{% if is_active_sidebar %}
+					{{function( 'get_sidebar' )}}
+				{% endif %}
 			</div>
 		</main><!-- #main -->
+
+		{% if wp_debug %}
+			{% include "partial/debug.twig" %}
+		{%endif %}
 
 		{% block footer %}
 			<footer id="footer" class="p-2 bg-altlight text-dark text-center position-relative" rel="footer.php">

@@ -69,35 +69,39 @@ class wfbt extends Timber\Site {
 		add_action( 'after_setup_theme', array( $this, 'theme_supports' ) );
 		add_action( 'widgets_init',  array( $this, 'wfbt_widgets_init' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'wfbt_scripts' ) );
+
+		add_filter( 'timber_context',  array( $this, 'wfbt_add_to_context' ), 10, 1 );
+		add_filter( 'get_twig',  array( $this, 'wfbt_add_to_twig'), 10, 1 );
+
 		parent::__construct();
+
 	}
 
-	function wfbt_scripts() {
+	public function wfbt_add_to_twig( $twig ) {
+		// Not using this at this time.
+		return $twig;
+	  }
+
+	public function wfbt_add_to_context($context){
+		// add sidebar availability here.
+		$context['is_active_sidebar'] = is_active_sidebar( 'rightsidebar' );
+		$context['wp_debug'] = WP_DEBUG;
+		return $context;
+	}
+
+	public function wfbt_scripts() {
 		wp_enqueue_style( 'wfbt-style', get_stylesheet_uri(), array(), _S_VERSION );
 		wp_enqueue_style( 'wfbt-bootstrap-style', get_template_directory_uri() . '/bootstrap/css/main.min.css', array(), _S_VERSION );
 		wp_enqueue_style( 'googlefont', 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&&display=swap&display=swap',);
 		
 	
-		wp_enqueue_script( 'wfbt-bootstrap-js', get_template_directory_uri() . '/bootstrap.bundle.min.js', array(), _S_VERSION, true );
+		wp_enqueue_script( 'wfbt-bootstrap-js', get_template_directory_uri() . '/bootstrap/js/bootstrap.bundle.min.js', array(), _S_VERSION, true );
 	
 		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 			wp_enqueue_script( 'comment-reply' );
 		}
 	}
 	
-
-	/** This is where you add some context
-	 *
-	 * @param string $context context['this'] Being the Twig's {{ this }}.
-	 */
-	public function add_to_context( $context ) {
-		$context['foo']   = 'bar';
-		$context['stuff'] = 'I am a value set in your functions.php file';
-		$context['notes'] = 'These values are available everytime you call Timber::context();';
-		$context['menu']  = new Timber\Menu();
-		$context['site']  = $this;
-		return $context;
-	}
 
 	public function theme_supports() {
 		// Add default posts and comments RSS feed links to head.

@@ -14,7 +14,11 @@ $timber_post     = Timber::get_post();
 $context['post'] = $timber_post;
 
 if ( post_password_required( $timber_post->ID ) ) {
-	Timber::render( 'single-password.twig', $context );
+	$templates        = array(  'single-password.twig' );
+	$context['twigtemplates'] = $templates;
+	Timber::render( $templates, $context );
 } else {
-	Timber::render( array( 'single-' . $timber_post->ID . '.twig', 'single-' . $timber_post->post_type . '.twig', 'single-' . $timber_post->slug . '.twig', 'single.twig' ), $context );
+	$templates        = array( 'single-' . $timber_post->ID . '.twig', 'single-' . $timber_post->post_type . '.twig', 'single-' . $timber_post->slug . '.twig', 'single.twig' );
+	$context['twigtemplates'] = $templates;
+	Timber::render( $templates, $context );
 }
