@@ -11,13 +11,18 @@
         <div id="debugGeneral" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#themeDebug">
             <div class="accordion-body">
                 
-                is_active_sidebar:  <BR><strong>{{ is_active_sidebar ? 'Yes' : 'No' }}</strong><BR>
                 Body Class: <BR><strong>{{body_class}}</strong><BR>
                 Twig templates: <BR>
                 <strong>
                 {% for twigtemplate in twigtemplates %}
                     {{ twigtemplate }}<BR>
-                {% endfor %}
+                {% endfor %}</strong>
+                is_active_sidebar:  <BR><strong>{{ is_active_sidebar ? 'Yes' : 'No' }}</strong><BR>
+                {% if custom_logo %}
+                    custom logo: <BR><strong>{{custom_logo}}</strong><BR>
+                {%else%}
+                    Blog Name: <BR><strong>{{bloginfo_name}}</strong><BR>
+                {%endif%}
                 </strong>
              </div>
         </div>

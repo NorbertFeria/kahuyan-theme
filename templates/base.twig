@@ -13,7 +13,15 @@
 		<header id="header" class="site-header" rel="header.php">
 			<nav class="navbar navbar-expand-lg bg-altlight navbar-light py-2 ">
 				<div class="container">
-					<a href="{{function('site_url')}}" class="navbar-brand">{{function('bloginfo','name')}}</a>
+					<a href="{{function('site_url')}}" class="navbar-brand">
+						{% if custom_logo %}
+							<img src="{{custom_logo}}" >
+						{%else%}
+							{{bloginfo_name}}
+						{%endif%}
+					</a>
+					{{bloginfo_description}}
+
 
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
 						<span class="navbar-toggler-icon"></span>

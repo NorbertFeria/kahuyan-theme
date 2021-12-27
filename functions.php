@@ -73,21 +73,123 @@ class wfbt extends Timber\Site {
 		add_filter( 'timber_context',  array( $this, 'wfbt_add_to_context' ), 10, 1 );
 		add_filter( 'get_twig',  array( $this, 'wfbt_add_to_twig'), 10, 1 );
 
+		add_action('customize_register', array( $this, 'wfbt_customize_register'), 10, 1 );
+
+		add_action( 'customize_register', array( $this, 'de_register'), 11 );
 		parent::__construct();
 
+	}
+
+	function de_register( $wp_customize ) {
+		// this is handled through add to context. 
+		$wp_customize->remove_control('display_header_text');
+
+		//This is being handled with the css/sass.
+		$wp_customize->remove_section("colors");
+
+		//Will handle this with the page templates using twig.
+		$wp_customize->remove_section("header_image");
+	}
+	
+
+	public function wfbt_add_to_context($context){
+		// add sidebar availability here.
+		$context['is_active_sidebar'] = is_active_sidebar( 'rightsidebar' );
+
+		// Prepare Custom CSS.
+		$context['addtional_css'] = $this->get_additional_css();
+		$context['footer_text'] = $this->get_footer_text();
+		$context['wp_debug'] = $this->get_debug_mode();
+
+		if ( has_custom_logo() ) {
+			// Custom logo may also be defined with a custom size. e.g.
+			// $custom_logo = wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), 'custom_logo_size' );
+			// **add_image_size( 'custom_logo_size', 400, 100, true );
+
+			$custom_logo = wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), 'full' ); 
+
+			$context['custom_logo'] = esc_url( $custom_logo[0] );
+		}else{
+			if( display_header_text() ){
+				$context['bloginfo_name'] = get_bloginfo( 'name' );
+				$context['bloginfo_description'] = get_bloginfo( 'description' );
+			}
+		}                         
+
+		return $context;
+	}
+
+	private function get_footer_text(){
+		$prepared_data = "";
+
+		$prepared_data = get_theme_mod( 'wfbt_footer_text_setting' );
+
+		return $prepared_data;
+	}
+
+	private function get_debug_mode(){
+		$prepared_data = false;
+
+		$debug_setting = get_theme_mod( 'wfbt_debug_setting' );
+
+		if(WP_DEBUG || $debug_setting){
+			$prepared_data = true;
+		}
+
+		return $prepared_data;
+	}
+
+	private function get_additional_css(){
+		$prepared_data = "";
+		$additional_css = wp_get_custom_css();
+
+		if( 0 < strlen( $additional_css ) ){
+			$prepared_data = '<style>'.$additional_css.'</style>';
+		}
+
+		return $prepared_data;
+	}
+
+
+	public function wfbt_customize_register( $wp_customize ) 
+	{	
+		$wp_customize->add_section('wfbt_general_section',array(
+			'title'=>'General settings'
+		));
+
+		$wp_customize->add_setting('wfbt_debug_setting',array(
+			'default'=>'1',
+		));
+
+		$wp_customize->add_control( 'wfbt_debug_control', array(
+			'label'      => __( 'Enable debug mode', 'Kahuyan' ),
+			'section'    => 'wfbt_general_section',
+			'settings'   => 'wfbt_debug_setting',
+			'type'       => 'checkbox',
+			'std'        => '1'
+		) );
+
+		$wp_customize->add_section('wfbt_footer_section',array(
+			'title'=>'Footer settings'
+		));
+			
+		$wp_customize->add_setting('wfbt_footer_text_setting',array(
+			'default'=>'Created by <a href="https://webfoundry.solutions" _target="blank" >Webfoundry.solutions</a>',
+		));
+
+		$wp_customize->add_control( 'wfbt_footer_text', array(
+			'label'      => __( 'Footer text', 'Kahuyan' ),
+			'section'=>'wfbt_footer_section',
+			'settings'=>'wfbt_footer_text_setting',
+			'type' => 'textarea',
+		) );
+		
 	}
 
 	public function wfbt_add_to_twig( $twig ) {
 		// Not using this at this time.
 		return $twig;
 	  }
-
-	public function wfbt_add_to_context($context){
-		// add sidebar availability here.
-		$context['is_active_sidebar'] = is_active_sidebar( 'rightsidebar' );
-		$context['wp_debug'] = WP_DEBUG;
-		return $context;
-	}
 
 	public function wfbt_scripts() {
 		wp_enqueue_style( 'wfbt-style', get_stylesheet_uri(), array(), _S_VERSION );
@@ -106,10 +208,10 @@ class wfbt extends Timber\Site {
 	public function theme_supports() {
 		// Add default posts and comments RSS feed links to head.
 		add_theme_support( 'automatic-feed-links' );
-
-		add_theme_support( 'title-tag' );
-
 		add_theme_support( 'post-thumbnails' );
+		add_theme_support( 'custom-header' );
+		// custom size for logo. 
+		//add_image_size( 'custom_logo_size', 400, 100, true );
 
 		/*
 		 * Switch default core markup for search form, comment form, and comments
@@ -125,16 +227,6 @@ class wfbt extends Timber\Site {
 				'caption',
 				'style',
 				'script',
-			)
-		);
-
-		add_theme_support(
-			'custom-logo',
-			array(
-				'height'      => 250,
-				'width'       => 250,
-				'flex-width'  => true,
-				'flex-height' => true,
 			)
 		);
 
@@ -155,22 +247,19 @@ class wfbt extends Timber\Site {
 				'audio',
 			)
 		);
+	 
+		add_theme_support( 'custom-logo', array(
+			'height'               => 100,
+			'width'                => 400,
+			'flex-height'          => true,
+			'flex-width'           => true,
+			'header-text'          => array( 'site-title', 'site-description' ),
+			'unlink-homepage-logo' => true, 
+		) );
 
 		register_nav_menus(
 			array(
 				'menu-1' => esc_html__( 'Primary', 'wfbt' ),
-			)
-		);
-
-		// Set up the WordPress core custom background feature.
-		add_theme_support(
-			'custom-background',
-			apply_filters(
-				'wfbt_custom_background_args',
-				array(
-					'default-color' => 'ffffff',
-					'default-image' => '',
-				)
 			)
 		);
 
