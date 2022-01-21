@@ -25,6 +25,8 @@ if ( file_exists( $composer_autoload ) ) {
 	$timber = new Timber\Timber();
 }
 
+require_once get_template_directory() . '/bootstrap/class-bootstrap-nav-walker.php';
+
 /**
  * This ensures that Timber is loaded and available as a PHP class.
  * If not, it gives an error message to help direct developers on where to activate
@@ -114,7 +116,19 @@ class wfbt extends Timber\Site {
 				$context['bloginfo_name'] = get_bloginfo( 'name' );
 				$context['bloginfo_description'] = get_bloginfo( 'description' );
 			}
-		}                         
+		}
+		$context['primary_nav'] = wp_nav_menu(
+			array(
+				'theme_location' => 'main-menu',
+				'container' => false,
+				'menu_class' => '',
+				'fallback_cb' => '__return_false',
+				'items_wrap' => '<ul id="%1$s" class="navbar-nav ms-auto %2$s">%3$s</ul>',
+				'depth' => 2,
+				'echo' => false,
+				'walker' => new bootstrap_5_wp_nav_menu_walker()
+			)
+		);
 
 		return $context;
 	}
@@ -259,7 +273,7 @@ class wfbt extends Timber\Site {
 
 		register_nav_menus(
 			array(
-				'menu-1' => esc_html__( 'Primary', 'wfbt' ),
+				'main-menu' => esc_html__( 'Primary', 'wfbt' ),
 			)
 		);
 

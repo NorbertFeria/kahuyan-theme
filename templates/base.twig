@@ -28,28 +28,16 @@
 					</button>
 				
 					<div class="collapse navbar-collapse" id="navmenu">
-						<ul class="navbar-nav ms-auto">
-							<li class="nav-item">
-								<a href="#whatwedo" class="nav-link">What we do</a>
-							</li>
-							<li class="nav-item">
-								<a href="#ourprocess" class="nav-link">Our Process</a>
-							</li>
-							<li class="nav-item">
-								<a href="#ourprojects" class="nav-link">Our Projects</a>
-							</li>
-							<li class="nav-item">
-								<a href="#contact" class="nav-link">Contact Us</a>
-							</li>
-						</ul>
+						{{primary_nav}}
 					</div>
+
 				</div>
 			</nav>
 		</header>
 
 		<main id="main" class="site-main" rel="index-php">
 			<div class="container my-3">
-				<div class="d-sm-flex">
+				<div class="row">
 				{% if title %}<h1>{{title}}</h1>{% endif %}
 				{% block content %}
 					Sorry, no content

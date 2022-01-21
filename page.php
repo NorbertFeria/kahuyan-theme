@@ -28,4 +28,4 @@ $context['post'] = $timber_post;
 $templates = array( 'page-' . $timber_post->post_name . '.twig', 'page.twig' );
 $context['twigtemplates'] = $templates;
 
-Timber::render( , $context );
+Timber::render( $templates, $context );
