@@ -1,10 +1,11 @@
-<div class="card m-3" id="blog-comment-{{comment.ID}}">
-	<div class="card-body">
+<div class="m-3" id="blog-comment-{{comment.ID}}">
+	<div class="card">
+		<div class="card-body">
 			<h5 class="comment-author">{{comment.author.name}} says</h5>
 			<div class="comment-content">{{comment.comment_content|wpautop}}</div>
-
+		</div>
+	</div>
 			<section class="comment-box">
-				
 				<!-- comment form -->
 				{% include "comment-form.twig" %}
 
@@ -19,7 +20,5 @@
 						</div>
 					</div>
 				{% endif %}
-
 			</section>
-	</div>
 </div>
